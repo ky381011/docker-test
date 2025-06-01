@@ -3,6 +3,8 @@ name: cpp env
 on:
   push:
     branches: [main]
+  push:
+    branches: [dev]
   pull_request:
     branches: [main]
   workflow_dispatch:
