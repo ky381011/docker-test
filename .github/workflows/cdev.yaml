@@ -21,4 +21,10 @@ jobs:
       - name: Build docker image
         run: docker build -t cpp-image -f C++/Dockerfile C++
       - name: Show g++ version inside container
-        run: docker run cpp-image g++ --version
+        run: docker run --rm cpp-image g++ --version
+
+      - name: Compile HelloWorld.cpp
+        run: |
+          docker run --rm cpp-image \
+            -w /CPP/HelloWorld \
+            bash -c "g++ HelloWorld.cpp -o HelloWorld && ./HelloWorld"
