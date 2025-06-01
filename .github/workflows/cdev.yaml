@@ -11,10 +11,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
   
-  steps:
-    - name: Source checkout
-      uses: actions/checkout@v4
-    - name: Set up docker buildx
-      uses: docker/setup-buildx-action@v3
-    - name: Build docker image
-      run: docker build -t built-image .
+    steps:
+      - name: Source checkout
+        uses: actions/checkout@v4
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build docker image
+        run: docker build -t built-image .
