@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
   
     steps:
+      - name: Echo
+        run: echo "Hello github actions!!"
       - name: Source checkout
         uses: actions/checkout@v4
       - name: Set up docker buildx
