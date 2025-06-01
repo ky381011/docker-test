@@ -19,7 +19,7 @@ jobs:
       - name: Set up docker buildx
         uses: docker/setup-buildx-action@v3
       - name: Build docker image
-        run: docker build -t cpp-image -f cpp/Dockerfile C++
+        run: docker build -t cpp-image -f cpp/Dockerfile cpp
       - name: Show g++ version inside container
         run: docker run --rm cpp-image g++ --version
 
