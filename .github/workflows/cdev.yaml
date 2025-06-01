@@ -1,0 +1,29 @@
+name: cpp env
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Echo
+        run: echo "Hello github actions!!"
+      - name: Source checkout
+        uses: actions/checkout@v4
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build docker image
+        run: docker build -t cpp-image -f cpp/Dockerfile cpp
+      - name: Show g++ version inside container
+        run: docker run --rm cpp-image g++ --version
+
+      - name: Compile HelloWorld.cpp
+        run: |
+          docker run --rm -w /cpp/HelloWorld cpp-image \
+            bash -c "g++ HelloWorld.cpp -o HelloWorld && ./HelloWorld"
