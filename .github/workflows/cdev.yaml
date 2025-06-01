@@ -1,4 +1,4 @@
-name: C++ env
+name: cpp env
 
 on:
   push:
@@ -17,4 +17,4 @@ jobs:
       - name: Set up docker buildx
         uses: docker/setup-buildx-action@v3
       - name: Build docker image
-        run: docker build -t built-image .
+        run: docker build -t cpp-image ../C++/Dockerfile
