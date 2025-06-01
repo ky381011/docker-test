@@ -25,6 +25,5 @@ jobs:
 
       - name: Compile HelloWorld.cpp
         run: |
-          docker run --rm cpp-image \
-            -w /cpp/HelloWorld \
+          docker run --rm -w /cpp/HelloWorld cpp-image \
             bash -c "g++ HelloWorld.cpp -o HelloWorld && ./HelloWorld"
