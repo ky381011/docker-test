@@ -45,10 +45,13 @@ jobs:
       - name: Container build and push
         uses: docker/build-push-action@v5
         with:
-          file: ./cpp/Dockerfile
+          context: ./cpp
+          file: Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME}}:latest
           labels: |
-            maintainer=yourname
-            version=1.0
-            description=HelloWorld C++ app
+            org.opencontainers.image.title=${{ env.IMAGE_NAME}}
+            org.opencontainers.image.version=1.0
+            org.opencontainers.image.description=HelloWorld C++ app
+            org.opencontainers.image.licenses=MIT
+            org.opencontainers.image.authors=${{ github.actor }}
