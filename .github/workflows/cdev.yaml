@@ -46,7 +46,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./cpp
-          file: Dockerfile
+          file: ./cpp/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME}}:latest
           labels: |
