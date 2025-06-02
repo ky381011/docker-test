@@ -48,8 +48,7 @@ jobs:
           file: ./cpp/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME}}:latest
-          labels:
-            labels: |
-              maintainer=yourname
-              version=1.0
-              description=HelloWorld C++ app
+          labels: |
+            maintainer=yourname
+            version=1.0
+            description=HelloWorld C++ app
