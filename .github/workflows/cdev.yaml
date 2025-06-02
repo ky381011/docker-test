@@ -7,9 +7,17 @@ on:
     branches: [main]
   workflow_dispatch:
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: cpp-env
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
   
     steps:
       - name: Echo
@@ -18,7 +26,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Set up docker buildx
         uses: docker/setup-buildx-action@v3
-      - name: Build docker image
+      - name: Log in ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build docker image for checking compile
         run: docker build -t cpp-image -f cpp/Dockerfile cpp
       - name: Show g++ version inside container
         run: docker run --rm cpp-image g++ --version
@@ -27,3 +41,15 @@ jobs:
         run: |
           docker run --rm -w /cpp/HelloWorld cpp-image \
             bash -c "g++ HelloWorld.cpp -o HelloWorld && ./HelloWorld"
+
+      - name: Container build and push
+        uses: docker/build-push-action@v5
+        with:
+          file: ./cpp/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME}}:latest
+          labels:
+            labels: |
+              maintainer=yourname
+              version=1.0
+              description=HelloWorld C++ app
