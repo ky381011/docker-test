@@ -28,4 +28,8 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/s
 
 EXPOSE 22
 
-CMD ["/usr/sbin/sshd", "-D"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# execute entrypoint.sh
+CMD ["/entrypoint.sh"]
