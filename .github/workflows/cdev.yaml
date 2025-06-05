@@ -20,6 +20,7 @@ jobs:
       contents: read
   
     steps:
+      # SETUP
       - name: Echo
         run: echo "Hello github actions!!"
       - name: Source checkout
@@ -32,16 +33,20 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      # DOCKER BUILD
       - name: Build docker image for checking compile
         run: docker build -t cpp-image -f cpp/Dockerfile cpp
       - name: Show g++ version inside container
         run: docker run --rm cpp-image g++ --version
 
+      # COMPILE TEST
       - name: Compile HelloWorld.cpp
         run: |
           docker run --rm -w /cpp/HelloWorld cpp-image \
             bash -c "g++ HelloWorld.cpp -o HelloWorld && ./HelloWorld"
 
+      # PUSH IMAGE
       - name: Container build and push when workflow_dispatch
         if: github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v5
@@ -56,3 +61,10 @@ jobs:
             org.opencontainers.image.description=HelloWorld C++ app
             org.opencontainers.image.licenses=MIT
             org.opencontainers.image.authors=${{ github.actor }}
+      
+      # TEST DOCKER COMPOSE
+      - name: Set up Docker Compose
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker compose build 
+        run: docker-compose up --build --abort-on-container-exit

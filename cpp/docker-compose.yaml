@@ -1,0 +1,7 @@
+services:
+  cpp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /cpp/HelloWorld
+    command: bash -c "g++ HelloWorld.cpp -o HelloWorld && ./HelloWorld"
