@@ -31,6 +31,11 @@ fi
 # start sshd
 exec /usr/sbin/sshd -D
 ```
-
+  
+  
+### Concept
+- Easy to rebuuild environment
+- Secure
+- Reuseful
 
 ### Memo
