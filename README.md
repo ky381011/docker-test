@@ -15,23 +15,26 @@ Making environments for Atcoder by Github Actions
   - openssh-server  
   
 - ENTRYPOINT  
-```bash
-#!/bin/bash
-set -e
+  <details>
+    <summary>Detail</summary>
 
-# copy pub_key
-if [ -f /authorized_keys ]; then
-  mkdir -p /home/dev/.ssh
-  cp /authorized_keys /home/dev/.ssh/authorized_keys
-  chown -R dev:dev /home/dev/.ssh
-  chmod 700 /home/dev/.ssh
-  chmod 600 /home/dev/.ssh/authorized_keys
-fi
+    ```bash
+    #!/bin/bash
+    set -e
 
-# start sshd
-exec /usr/sbin/sshd -D
-```
-  
+    # copy pub_key
+    if [ -f /authorized_keys ]; then
+      mkdir -p /home/dev/.ssh
+      cp /authorized_keys /home/dev/.ssh/authorized_keys
+      chown -R dev:dev /home/dev/.ssh
+      chmod 700 /home/dev/.ssh
+      chmod 600 /home/dev/.ssh/authorized_keys
+    fi
+
+    # start sshd
+    exec /usr/sbin/sshd -D
+    ```
+  </details>  
   
 ### Concept
 - Easy to rebuuild environment
