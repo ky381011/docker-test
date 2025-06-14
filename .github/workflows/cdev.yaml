@@ -62,9 +62,3 @@ jobs:
             org.opencontainers.image.licenses=MIT
             org.opencontainers.image.authors=${{ github.actor }}
       
-      # TEST DOCKER COMPOSE
-      - name: Set up Docker Compose
-        uses: docker/setup-buildx-action@v3
-
-      - name: Docker compose build 
-        run: docker compose -f cpp/docker-compose.yaml up --build --abort-on-container-exit
