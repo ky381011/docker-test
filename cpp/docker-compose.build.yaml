@@ -1,10 +1,8 @@
 services:
   cpp:
     build:
-      context: ./cpp
+      context: .
       dockerfile: Dockerfile
-    profiles:
-      - build
     image: cpp-image
     working_dir: /cpp/HelloWorld
     

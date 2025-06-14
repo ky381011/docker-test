@@ -2,9 +2,6 @@ version: "3.9"
 
 services:
   cpp-run:
-    build:
-      context: ./cpp
-      dockerfile: Dockerfile
     image: cpp-image
     working_dir: /cpp/HelloWorld
     command: >
