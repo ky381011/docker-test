@@ -39,7 +39,7 @@ jobs:
       # DOCKER BUILD
       - name: Build docker image for checking compile
         # run: docker build -t cpp-image -f cpp/Dockerfile cpp
-        run: docker compose -f cpp/docker-compose.yaml build
+        run: docker compose -f cpp/docker-compose.build.yaml build
 
       # COMPILE TEST
       - name: Compile HelloWorld.cpp
