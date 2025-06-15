@@ -65,7 +65,7 @@ jobs:
 
       # 3.
       - name: Run container
-        run: docker compose -f docker-compose.run.ssh-test.yaml up -d
+        run: docker compose -f cpp/docker-compose.run.ssh-test.yaml up -d
 
       # 4. 
       - name: Wait for SSH to be ready
