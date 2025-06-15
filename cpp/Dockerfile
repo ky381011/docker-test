@@ -29,8 +29,9 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/s
 # MKDIR FOR SSH
 USER root
 
-RUN mkdir -p /home/dev/.ssh && \
-    chown -R dev:dev /home/dev/.ssh && \
+RUN mkdir /var/run/sshd && \
+    mkdir -p /home/dev/.ssh && \
+    chown dev:dev /home/dev/.ssh && \
     chmod 700 /home/dev/.ssh
 
 EXPOSE 22

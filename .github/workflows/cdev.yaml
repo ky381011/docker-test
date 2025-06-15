@@ -85,11 +85,11 @@ jobs:
           done
 
       # 5.
-      - name: Add public key to authorized_keys in container
+      - name: Add public key to container
         run: |
-          echo "Container name is: $CONTAINER_NAME"
           docker exec $CONTAINER_NAME bash -c "
-            echo \"$PUBLIC_KEY\" > /home/dev/.ssh/authorized_keys && \
+            echo '${{ env.PUBLIC_KEY }}' > /home/dev/.ssh/authorized_keys && \
+            chown dev:dev /home/dev/.ssh/authorized_keys && \
             chmod 600 /home/dev/.ssh/authorized_keys
           "
 
