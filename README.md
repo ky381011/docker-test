@@ -35,7 +35,48 @@ Making environments for Atcoder by Github Actions
     exec /usr/sbin/sshd -D
     ```
   </details>  
-  
+
+### How to use
+<details>
+    <summary>temp memo</summary>
+    
+    ```
+    [ec2-user@ip-10-0-10-242 cpp-run]$ cat docker-compose.yaml
+    services:
+      cpp-ssh:
+        image: ghcr.io/ky381011/cpp-env
+        ports:
+          - "2222:22"
+        volumes:
+          - type: bind
+            source: ./authorized_keys
+            target: /home/dev/.ssh/authorized_keys
+    [ec2-user@ip-10-0-10-242 cpp-run]$ cat setting.sh
+    #!/bin/bash
+    set -e
+
+    docker compose exec cpp-ssh bash -c "
+      chown -R dev:dev /home/dev/.ssh && \
+      chmod 700 /home/dev/.ssh && \
+      chmod 600 /home/dev/.ssh/authorized_keys
+    "
+    [ec2-user@ip-10-0-10-242 cpp-run]$ ssh -p 2222 dev@localhost
+    Welcome to Ubuntu 24.04.2 LTS (GNU/Linux 6.1.140-154.222.amzn2023.x86_64 x86_64)
+
+    * Documentation:  https://help.ubuntu.com
+    * Management:     https://landscape.canonical.com
+    * Support:        https://ubuntu.com/pro
+
+    This system has been minimized by removing packages and content that are
+    not required on a system that users do not log into.
+
+    To restore this content, you can run the 'unminimize' command.
+    Last login: Sun Jun 15 21:41:02 2025 from 172.20.0.1
+    dev@98af4a646e94:~$
+    ```
+
+</details>  
+
 ### Concept
 - Easy to rebuuild environment
 - Secure
