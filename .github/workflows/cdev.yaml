@@ -89,10 +89,7 @@ jobs:
         run: |
           echo "Container name is: $CONTAINER_NAME"
           docker exec $CONTAINER_NAME bash -c "
-            mkdir -p /home/dev/.ssh && \
             echo \"$PUBLIC_KEY\" > /home/dev/.ssh/authorized_keys && \
-            chown -R dev:dev /home/dev/.ssh && \
-            chmod 700 /home/dev/.ssh && \
             chmod 600 /home/dev/.ssh/authorized_keys
           "
 

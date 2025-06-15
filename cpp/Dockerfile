@@ -26,6 +26,11 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/s
     sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config && \
     echo 'AllowUsers dev' >> /etc/ssh/sshd_config
 
+# MKDIR FOR SSH
+RUN mkdir -p /home/dev/.ssh && \
+    chown -R dev:dev /home/dev/.ssh && \
+    chmod 700 /home/dev/.ssh
+
 EXPOSE 22
 
 COPY entrypoint.sh /entrypoint.sh
