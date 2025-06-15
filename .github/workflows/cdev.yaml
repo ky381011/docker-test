@@ -54,12 +54,12 @@ jobs:
           echo "PUBLIC_KEY=$(cat id_rsa.pub)" >> $GITHUB_ENV
       
 
-      # 2.1.
+      # 2.1. Load container name from .env
       - name: Load container name from cpp/.env
         id: load_container_name
         run: |
           echo "Reading cpp/.env..."
-          CONTAINER_NAME=$(grep '^CONTAINER_NAME=' cpp/.env | cut -d '=' -f2 | tr -d '\r' | xargs)
+          CONTAINER_NAME=$(grep '^SSHTEST_NAME=' cpp/.env | cut -d '=' -f2 | tr -d '\r' | xargs)
           echo "CONTAINER_NAME=$CONTAINER_NAME"
           echo "CONTAINER_NAME=$CONTAINER_NAME" >> $GITHUB_ENV
 
