@@ -46,21 +46,26 @@ jobs:
         run: docker compose -f cpp/docker-compose.run.compile-test.yaml run --rm cpp-compile
 
       # SSH TEST
-      # 1.
+      # 1.1.
       - name: Generate SSH key pair
         id: generate_ssh_key
         run: |
           ssh-keygen -t rsa -b 4096 -f id_rsa -N ""
           echo "PUBLIC_KEY=$(cat id_rsa.pub)" >> $GITHUB_ENV
+      
 
-      # 2.
-      - name: Load container name from .env in cpp/
+      # 2.1.
+      - name: Load container name from cpp/.env
         id: load_container_name
         run: |
           echo "Reading cpp/.env..."
-          CONTAINER_NAME=$(grep CONTAINER_NAME cpp/.env | cut -d '=' -f2)
+          CONTAINER_NAME=$(grep '^CONTAINER_NAME=' cpp/.env | cut -d '=' -f2 | tr -d '\r')
           echo "CONTAINER_NAME=$CONTAINER_NAME"
           echo "CONTAINER_NAME=$CONTAINER_NAME" >> $GITHUB_ENV
+
+      # 2.2.
+      - name: Debug CONTAINER_NAME
+        run: echo "Container name is $CONTAINER_NAME"
 
       # 3.
       - name: Run container
