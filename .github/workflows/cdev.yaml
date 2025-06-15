@@ -59,7 +59,7 @@ jobs:
         id: load_container_name
         run: |
           echo "Reading cpp/.env..."
-          CONTAINER_NAME=$(grep '^CONTAINER_NAME=' cpp/.env | cut -d '=' -f2 | tr -d '\r')
+          CONTAINER_NAME=$(grep '^CONTAINER_NAME=' cpp/.env | cut -d '=' -f2 | tr -d '\r' | xargs)
           echo "CONTAINER_NAME=$CONTAINER_NAME"
           echo "CONTAINER_NAME=$CONTAINER_NAME" >> $GITHUB_ENV
 
