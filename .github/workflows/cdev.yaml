@@ -43,8 +43,60 @@ jobs:
 
       # COMPILE TEST
       - name: Compile HelloWorld.cpp
-        run: docker compose -f cpp/docker-compose.run.yaml run --rm cpp-run
+        run: docker compose -f cpp/docker-compose.run.compile-test.yaml run --rm cpp-compile
 
+      # SSH TEST
+      # 1. 
+      - name: Wait for SSH to be ready
+        run: |
+          echo "Waiting for SSH..."
+          for i in {1..10}; do
+            if nc -z localhost 2222; then
+              echo "SSH is up!"
+              break
+            fi
+            echo "Retrying in 3s..."
+            sleep 3
+          done
+
+      # 2.
+      - name: Generate SSH key pair
+        id: generate_ssh_key
+        run: |
+          ssh-keygen -t rsa -b 4096 -f id_rsa -N ""
+          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
+          cat id_rsa.pub >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      # 3.
+      - name: Load container name from .env in cpp/
+        id: load_container_name
+        run: |
+          echo "Reading cpp/.env..."
+          CONTAINER_NAME=$(grep CONTAINER_NAME cpp/.env | cut -d '=' -f2)
+          echo "CONTAINER_NAME=$CONTAINER_NAME"
+
+      # 4.
+      - name: Run container
+        run: docker-compose -f docker-compose.run.ssh-test.yaml up -d
+
+      # 5.
+      - name: Add public key to authorized_keys in container
+        run: |
+          docker exec $CONTAINER_NAME bash -c "mkdir -p /home/dev/.ssh && \
+            echo \"$PUBLIC_KEY\" > /home/dev/.ssh/authorized_keys && \
+            chown -R dev:dev /home/dev/.ssh && \
+            chmod 700 /home/dev/.ssh && \
+            chmod 600 /home/dev/.ssh/authorized_keys"
+
+      # 6.
+      - name: Test SSH connection
+        run: |
+          ssh -i id_rsa -o StrictHostKeyChecking=no -p 2222 dev@localhost "echo 'SSH login succeeded!'"
+
+      # 7.
+      - name: Stop and remove container
+        run: docker-compose -f docker-compose.run.ssh-test.yaml down
 
       # PUSH IMAGE
       - name: Container build and push when workflow_dispatch
