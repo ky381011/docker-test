@@ -29,7 +29,7 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/s
 # MKDIR FOR SSH
 USER root
 
-RUN mkdir /var/run/sshd && \
+RUN mkdir -p /var/run/sshd && \
     mkdir -p /home/dev/.ssh && \
     chown dev:dev /home/dev/.ssh && \
     chmod 700 /home/dev/.ssh
