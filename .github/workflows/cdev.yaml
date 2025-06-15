@@ -104,7 +104,7 @@ jobs:
 
       # 7.
       - name: Stop and remove container
-        run: docker-compose -f docker-compose.run.ssh-test.yaml down
+        run: docker compose -f docker-compose.run.ssh-test.yaml down
 
       # PUSH IMAGE
       - name: Container build and push when workflow_dispatch
