@@ -51,9 +51,7 @@ jobs:
         id: generate_ssh_key
         run: |
           ssh-keygen -t rsa -b 4096 -f id_rsa -N ""
-          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
-          cat id_rsa.pub >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo "PUBLIC_KEY=$(cat id_rsa.pub)" >> $GITHUB_ENV
 
       # 2.
       - name: Load container name from .env in cpp/
