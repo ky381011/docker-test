@@ -20,11 +20,14 @@ jobs:
       contents: read
   
     steps:
+      # SETUP
       - name: Echo
         run: echo "Hello github actions!!"
       - name: Source checkout
         uses: actions/checkout@v4
       - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Compose
         uses: docker/setup-buildx-action@v3
       - name: Log in ghcr
         uses: docker/login-action@v3
@@ -32,17 +35,85 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      # DOCKER BUILD
       - name: Build docker image for checking compile
-        run: docker build -t cpp-image -f cpp/Dockerfile cpp
-      - name: Show g++ version inside container
-        run: docker run --rm cpp-image g++ --version
+        # run: docker build -t cpp-image -f cpp/Dockerfile cpp
+        run: docker compose -f cpp/docker-compose.build.yaml build
 
+      # COMPILE TEST
       - name: Compile HelloWorld.cpp
-        run: |
-          docker run --rm -w /cpp/HelloWorld cpp-image \
-            bash -c "g++ HelloWorld.cpp -o HelloWorld && ./HelloWorld"
+        run: docker compose -f cpp/docker-compose.run.compile-test.yaml run --rm cpp-compile
 
-      - name: Container build and push
+      # SSH TEST
+      # 1.1.
+      - name: Generate SSH key pair
+        id: generate_ssh_key
+        run: |
+          ssh-keygen -t rsa -b 4096 -f id_rsa -N ""
+          echo "PUBLIC_KEY=$(cat id_rsa.pub)" >> $GITHUB_ENV
+      
+
+      # 2.1. Load container name from .env
+      - name: Load container name from cpp/.env
+        id: load_container_name
+        run: |
+          echo "Reading cpp/.env..."
+          CONTAINER_NAME=$(grep '^SSHTEST_NAME=' cpp/.env | cut -d '=' -f2 | tr -d '\r' | xargs)
+          echo "CONTAINER_NAME=$CONTAINER_NAME"
+          echo "CONTAINER_NAME=$CONTAINER_NAME" >> $GITHUB_ENV
+
+      # 2.2.
+      - name: Debug CONTAINER_NAME
+        run: echo "Container name is $CONTAINER_NAME"
+
+      # 3.
+      - name: Run container
+        run: docker compose -f cpp/docker-compose.run.ssh-test.yaml up -d
+
+      # 4. 
+      - name: Wait for SSH to be ready
+        run: |
+          echo "Waiting for SSH..."
+          for i in {1..10}; do
+            if nc -z localhost 2222; then
+              echo "SSH is up!"
+              break
+            fi
+            echo "Retrying in 3s..."
+            sleep 3
+          done
+
+      # 5.
+      # - name: Add public key to container
+      #   run: |
+      #     docker exec $CONTAINER_NAME bash -c "
+      #       echo '${{ env.PUBLIC_KEY }}' > /home/dev/.ssh/authorized_keys && \
+      #       chown dev:dev /home/dev/.ssh/authorized_keys && \
+      #       chmod 600 /home/dev/.ssh/authorized_keys
+      #     "
+      
+      - name: Make setup_ssh.sh executable
+        run: chmod +x .github/workflows/script/ssh-connect-test.sh
+
+      - name: Copy SSH setup script to container
+        run: docker cp .github/workflows/script/ssh-connect-test.sh $CONTAINER_NAME:/tmp/setup_ssh.sh
+
+      - name: Run SSH setup script inside container
+        run: docker exec -e PUBLIC_KEY="$PUBLIC_KEY" $CONTAINER_NAME bash /tmp/setup_ssh.sh
+
+      # 6.
+      - name: Test SSH connection
+        run: |
+          ssh -i id_rsa -o StrictHostKeyChecking=no -p 2222 dev@localhost "echo 'SSH login succeeded!'"
+
+      # 7.
+      - name: Stop and remove container
+        run: docker compose -f cpp/docker-compose.run.ssh-test.yaml down
+
+      # PUSH IMAGE
+      - name: Container build and push when workflow_dispatch
+        if: github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v5
         with:
           context: ./cpp
@@ -55,3 +126,4 @@ jobs:
             org.opencontainers.image.description=HelloWorld C++ app
             org.opencontainers.image.licenses=MIT
             org.opencontainers.image.authors=${{ github.actor }}
+      

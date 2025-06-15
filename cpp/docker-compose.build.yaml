@@ -1,0 +1,8 @@
+services:
+  cpp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cpp-image
+    working_dir: /cpp/HelloWorld
+    

@@ -1,0 +1,6 @@
+services:
+  cpp-compile:
+    image: cpp-image
+    working_dir: /cpp/HelloWorld
+    command: >
+      bash -c "g++ HelloWorld.cpp -o HelloWorld && ./HelloWorld"

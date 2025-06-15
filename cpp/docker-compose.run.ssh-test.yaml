@@ -1,0 +1,6 @@
+services:
+  cpp-ssh:
+    image: cpp-image
+    ports:
+      - "2222:22"
+    container_name: ${SSHTEST_NAME}
