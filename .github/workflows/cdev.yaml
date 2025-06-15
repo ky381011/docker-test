@@ -85,14 +85,22 @@ jobs:
           done
 
       # 5.
-      - name: Add public key to container
-        run: |
-          docker exec $CONTAINER_NAME bash -c "
-            echo '${{ env.PUBLIC_KEY }}' > /home/dev/.ssh/authorized_keys && \
-            chown dev:dev /home/dev/.ssh/authorized_keys && \
-            chmod 600 /home/dev/.ssh/authorized_keys
-          "
+      # - name: Add public key to container
+      #   run: |
+      #     docker exec $CONTAINER_NAME bash -c "
+      #       echo '${{ env.PUBLIC_KEY }}' > /home/dev/.ssh/authorized_keys && \
+      #       chown dev:dev /home/dev/.ssh/authorized_keys && \
+      #       chmod 600 /home/dev/.ssh/authorized_keys
+      #     "
+      
+      - name: Make setup_ssh.sh executable
+        run: chmod +x .github/workflows/script/setup_ssh.sh
 
+      - name: Copy SSH setup script to container
+        run: docker cp .github/workflows/script/setup_ssh.sh $CONTAINER_NAME:/tmp/setup_ssh.sh
+
+      - name: Run SSH setup script inside container
+        run: docker exec -e PUBLIC_KEY="$PUBLIC_KEY" $CONTAINER_NAME bash /tmp/setup_ssh.sh
 
       # 6.
       - name: Test SSH connection
