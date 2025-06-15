@@ -94,10 +94,10 @@ jobs:
       #     "
       
       - name: Make setup_ssh.sh executable
-        run: chmod +x .github/workflows/script/setup_ssh.sh
+        run: chmod +x .github/workflows/script/ssh-connect-test.sh
 
       - name: Copy SSH setup script to container
-        run: docker cp .github/workflows/script/setup_ssh.sh $CONTAINER_NAME:/tmp/setup_ssh.sh
+        run: docker cp .github/workflows/script/ssh-connect-test.sh $CONTAINER_NAME:/tmp/setup_ssh.sh
 
       - name: Run SSH setup script inside container
         run: docker exec -e PUBLIC_KEY="$PUBLIC_KEY" $CONTAINER_NAME bash /tmp/setup_ssh.sh
