@@ -46,7 +46,28 @@ jobs:
         run: docker compose -f cpp/docker-compose.run.compile-test.yaml run --rm cpp-compile
 
       # SSH TEST
-      # 1. 
+      # 1.
+      - name: Generate SSH key pair
+        id: generate_ssh_key
+        run: |
+          ssh-keygen -t rsa -b 4096 -f id_rsa -N ""
+          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
+          cat id_rsa.pub >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      # 2.
+      - name: Load container name from .env in cpp/
+        id: load_container_name
+        run: |
+          echo "Reading cpp/.env..."
+          CONTAINER_NAME=$(grep CONTAINER_NAME cpp/.env | cut -d '=' -f2)
+          echo "CONTAINER_NAME=$CONTAINER_NAME"
+
+      # 3.
+      - name: Run container
+        run: docker compose -f docker-compose.run.ssh-test.yaml up -d
+
+      # 4. 
       - name: Wait for SSH to be ready
         run: |
           echo "Waiting for SSH..."
@@ -58,27 +79,6 @@ jobs:
             echo "Retrying in 3s..."
             sleep 3
           done
-
-      # 2.
-      - name: Generate SSH key pair
-        id: generate_ssh_key
-        run: |
-          ssh-keygen -t rsa -b 4096 -f id_rsa -N ""
-          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
-          cat id_rsa.pub >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      # 3.
-      - name: Load container name from .env in cpp/
-        id: load_container_name
-        run: |
-          echo "Reading cpp/.env..."
-          CONTAINER_NAME=$(grep CONTAINER_NAME cpp/.env | cut -d '=' -f2)
-          echo "CONTAINER_NAME=$CONTAINER_NAME"
-
-      # 4.
-      - name: Run container
-        run: docker-compose -f docker-compose.run.ssh-test.yaml up -d
 
       # 5.
       - name: Add public key to authorized_keys in container
