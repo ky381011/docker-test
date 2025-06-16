@@ -37,6 +37,17 @@ Making environments for Atcoder by Github Actions
   </details>  
 
 ### How to use
+##### 0. Assumptions
+There is no authorized_keys for ssh in container image.  
+So, need to put keys into ```/home/dev/.ssh``` ("dev" is user name).
+  
+And, can't overwrite ```CMD``` in Dockerfile,  
+so using shell script after container start.
+
+##### 1. Start container
+
+
+
 <details>
     <summary>temp memo</summary>
     
