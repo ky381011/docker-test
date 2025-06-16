@@ -2,7 +2,10 @@
 
 Making environments for Atcoder by Github Actions
 
-### Feature
+> [TIP]
+> Feature
+
+
 - base image  
   - ubuntu:latest
 - installed package  
@@ -36,7 +39,10 @@ Making environments for Atcoder by Github Actions
     ```
   </details>  
 
-### How to use
+> [!TIP]
+> How to use
+
+Use example is tested in AWS EC2
 ##### 0. Assumptions
 There is no authorized_keys for ssh in container image.  
 So, need to put keys into ```/home/dev/.ssh``` ("dev" is user name).
@@ -88,9 +94,12 @@ so using shell script after container start.
 
 </details>  
 
+> [!TIP]
+> Concept
 ### Concept
 - Easy to rebuuild environment
 - Secure
 - Reuseful
 
-### Memo
+> [!NOTE]
+> Memo
