@@ -2,7 +2,7 @@
 
 Making environments for Atcoder by Github Actions
 
-> [TIP]
+> [!TIP]
 > Feature
 
 - base image  
