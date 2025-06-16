@@ -2,9 +2,8 @@
 
 Making environments for Atcoder by Github Actions
 
-> [!TIP]
-> Feature
-
+> [TIP]
+### Feature
 
 - base image  
   - ubuntu:latest
@@ -40,7 +39,7 @@ Making environments for Atcoder by Github Actions
   </details>  
 
 > [!TIP]
-> How to use
+### How to use
 
 Use example is tested in AWS EC2
 ##### 0. Assumptions
@@ -95,11 +94,15 @@ so using shell script after container start.
 </details>  
 
 > [!TIP]
-> Concept
 ### Concept
 - Easy to rebuuild environment
 - Secure
 - Reuseful
 
 > [!NOTE]
+<<<<<<< HEAD
+### Memo
+=======
 > Memo
+
+>>>>>>> a9d2cd740730348efdefd9c529dc8d3dbc3f2ac6
