@@ -2,7 +2,7 @@ name: cpp env
 
 on:
   push:
-    branches: [main, dev]
+    branches: [dev]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -113,7 +113,7 @@ jobs:
 
       # PUSH IMAGE
       - name: Container build and push when workflow_dispatch
-        if: github.event_name == 'workflow_dispatch'
+        if: (github.event_name == 'pull_request' && github.base_ref == 'main') || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v5
         with:
           context: ./cpp
