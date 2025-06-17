@@ -41,7 +41,10 @@ Making environments for Atcoder by Github Actions
 > [!TIP]
 > How to use
 
-Use example is tested in AWS EC2
+Use example is tested in AWS EC2  
+  
+In instance, need docker and docker compose
+
 ##### 0. Assumptions
 There is no authorized_keys for ssh in container image.  
 So, need to put keys into ```/home/dev/.ssh``` ("dev" is user name).
