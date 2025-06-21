@@ -4,9 +4,6 @@ set -e
 # Reading setting file
 source gitconfig.env
 
-# Copying secret key to container to connect github by ssh
-docker cp $HOME/.ssh/id_rsa cpp-ssh:/home/dev/.ssh/id_rsa
-
 # Copying ssh pub key from host to container
 docker compose exec cpp-ssh bash -c "
   chown dev:dev /home/dev/.ssh/id_rsa && \

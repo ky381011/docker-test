@@ -7,3 +7,7 @@ services:
       - type: bind
         source: ./authorized_keys
         target: /home/dev/.ssh/authorized_keys
+      
+      - type: bind
+        source: ./id_rsa
+        target: /home/dev/.ssh/id_rsa
