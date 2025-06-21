@@ -1,0 +1,13 @@
+services:
+  cpp-ssh:
+    image: ghcr.io/ky381011/cpp-env
+    ports:
+      - "2222:22"
+    volumes:
+      - type: bind
+        source: ./authorized_keys
+        target: /home/dev/.ssh/authorized_keys
+      
+      - type: bind
+        source: ./id_rsa
+        target: /home/dev/.ssh/id_rsa
