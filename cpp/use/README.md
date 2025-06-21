@@ -9,6 +9,7 @@ Need files **only** in this directory
 1. SSH
     1. Generate SSH key
     2. Put key in this directory (or copy content and mv pub_key_exp)
+    3. Setting github SSH pub key generated in 1. (using same secret key to connect github) 
 2. Git
     1. Rewrite gitconfig.exp.env and `mv gitconfig.exp.env gitconfig.env`
 3. Shell script
