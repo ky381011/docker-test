@@ -42,7 +42,7 @@ In order to use VSCode, need setting ssh config.
 ```sshconfig
 Host bastion
   HostName xx.xx.xx.xx # Bastion ip address
-  User "BastionUserName"
+  User "BastionUserName" # Exp) EC2 => ec2-user
   IdentityFile /PATH/to/Key # Key for connect bastion
 
 Host container
