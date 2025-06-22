@@ -34,3 +34,20 @@ docker compose -f docker-compose.yaml up -d
 ```bash
 ssh -p 2222 dev@localhost
 ```
+
+## Addition
+### VSCode setting
+In order to use VSCode, need setting ssh config.
+
+```sshconfig
+Host bastion
+  HostName xx.xx.xx.xx # Bastion ip address
+  User "BastionUserName"
+  IdentityFile /PATH/to/Key # Key for connect bastion
+
+Host container
+  HostName 127.0.0.1  # <= localhost
+  User dev            # <= User name setting in Dockerfile
+  ProxyJump bastion
+  IdentityFile /PATH/to/key # key for connect container
+```
