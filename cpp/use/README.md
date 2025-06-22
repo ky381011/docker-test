@@ -51,3 +51,6 @@ Host container
   ProxyJump bastion
   IdentityFile /PATH/to/key # key for connect container
 ```
+
+> [!CAUTION]
+> Must add public key of local machine into container `authorized_keys` 
